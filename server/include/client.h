@@ -7,6 +7,8 @@
 #include <thread>
 #include <boost/asio.hpp>
 
+#include "reply.h"
+#include "request.h"
 #include "error.h"
 
 
@@ -25,7 +27,10 @@ class client
 
 void handle_client (client* c);
 
-error_t read_request (std::string request, client* c);
+srfs_error_t read_request (std::string str, client* c, request& request);
+
+
+srfs_error_t process_request (client* c, request& req, reply& rep);
 
 #endif
 

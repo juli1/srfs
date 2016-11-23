@@ -11,7 +11,7 @@ typedef enum requestt
    closefile = 2,
    readfile = 3,
    invalid = -1
-}request_t;
+}request_type_t;
 
 class request
 {
@@ -23,22 +23,23 @@ public:
       size = 0;
    }
 
-   request (request_t t, size_t o, size_t s) :  type(t), path("")
+   request (request_type_t t, size_t o, size_t s) :  type(t), path("")
    {
       offset = o;
       size = s;
    }
 
-   request (request_t t, std::string p) :  type(t), path (p)
+   request (request_type_t t, std::string p) :  type(t), path (p)
    {
       offset = 0;
       size = 0;
    };
 
    void setPath (std::string p) {this->path = p;}
+   void setType (request_type_t t) {this->type = t;}
 
 private:
-   request_t type;
+   request_type_t type;
    std::string path;
    size_t size;
    size_t offset;
