@@ -1,12 +1,27 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
+
+#include "request.h"
 #include "client.h"
 
 using std::endl;
 using std::cout;
 
 #define MAX_LENGTH 1024
+
+error_t read_request (std::string str, client* c, request_t& request)
+{
+   /*
+    * We assume that is the request is less than 10
+    * chars, this is not valid.
+    */
+   if (str.size () < 10)
+   {
+      return invalid_request;
+   }
+   return 0;
+}
 
 void handle_client (client* c)
 {

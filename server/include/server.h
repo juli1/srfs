@@ -2,9 +2,9 @@
 #define __SERVER_H__
 
 #include <string>
-#include <boost/asio.hpp>
 #include <chrono>
 #include <thread>
+#include <boost/asio.hpp>
 
 using boost::asio::ip::tcp;
 

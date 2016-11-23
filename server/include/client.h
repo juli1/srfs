@@ -7,6 +7,9 @@
 #include <thread>
 #include <boost/asio.hpp>
 
+#include "error.h"
+
+
 using std::move;
 using boost::asio::ip::tcp;
 
@@ -21,6 +24,8 @@ class client
 };
 
 void handle_client (client* c);
+
+error_t read_request (std::string request, client* c);
 
 #endif
 
