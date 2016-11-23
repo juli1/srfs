@@ -7,19 +7,20 @@
 #include <thread>
 #include <boost/asio.hpp>
 
+using std::move;
 using boost::asio::ip::tcp;
 
 class client
 {
-public:
-   client (tcp::socket& s);
-   tcp::socket& get_socket () {return *(this->socket);}
+   public:
+      client (tcp::socket s) : socket(std::move(s)) {};
+      tcp::socket& get_socket () {return socket;}
 
-private:
-   tcp::socket* socket;
-   std::thread* thread;
-
+   private:
+      tcp::socket socket;
 };
+
+void handle_client (client* c);
 
 #endif
 

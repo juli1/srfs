@@ -1,8 +1,8 @@
 CC=/usr/bin/g++
-CPP_FLAGS=-Wall -std=c++11 
+CPP_FLAGS=-Wall -std=c++11  -g
 LD_FLAGS=-lboost_system -lpthread
 BINARY=bin/server
-SRCS=src/main.cpp src/client.cpp
+SRCS=src/main.cpp src/client.cpp src/server.cpp
 INCLUDE=-Iinclude/
 
 all:
