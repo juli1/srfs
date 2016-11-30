@@ -7,6 +7,8 @@
 typedef enum replytypet
 {
    ok,
+   open_ok,
+   open_ko,
    error,
 }reply_type_t;
 
@@ -21,7 +23,12 @@ public:
       datasize = 0;
    };
 
-   srfs_error_t setData (char* d, uint32_t s)
+   void set_type (reply_type_t t)
+   {
+      this->type = t;
+   }
+
+   srfs_error_t set_data (char* d, uint32_t s)
    {
       if (s > maxlength)
       {
@@ -33,10 +40,34 @@ public:
       return no_error; 
    }
 
+   void set_handle (int h)
+   {
+      this->handle = h;
+   }
+
    srfs_error_t serialize (char* c, uint32_t& s)
    {
-      std::memcpy (c, "hello\n", 6);
-      s = 6;
+      switch (this->type)
+      {
+         case open_ok:
+         {
+            std::memcpy (c, "open ok\n", 6);
+            s = 6;
+            break;
+         }
+
+         case open_ko:
+         {
+            std::memcpy (c, "open ko\n", 6);
+            s = 6;
+
+            break;
+         }
+         default:
+         {
+            return no_error;
+         }
+      }
       return no_error;
    }
 
@@ -44,6 +75,7 @@ private:
    reply_type_t type;
    char data[maxlength];
    uint32_t datasize;
+   int handle;
 };
 
 #endif

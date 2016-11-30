@@ -37,6 +37,8 @@ public:
 
    void setPath (std::string p) {this->path = p;}
    void setType (request_type_t t) {this->type = t;}
+   request_type_t getType() {return this->type;}
+   std::string getPath() {return this->path;}
 
 private:
    request_type_t type;

@@ -8,6 +8,7 @@
 #include <thread>
 #include <cstdint>
 #include <cstring>
+#include <fstream>
 #include <boost/asio.hpp>
 
 #include "reply.h"
@@ -33,24 +34,35 @@ class client
 
       tcp::socket& get_socket () {return socket;}
 
-      filehandle& getHandle(size_t n)
+      filehandle* get_handle(size_t n)
       {
          return handles[n];
       }
 
-      size_t getUnusedHandle ()
+      srfs_error_t openfile (std::string filename, int& handle);
+
+
+      srfs_error_t get_unused_handle (int& handle)
       {
          for (size_t i = 0 ; i < maxhandles ; i++)
          {
             cout << "handle at " << std::to_string(i) << "->" << handles[i] << endl;
+
+            if (handles[i] == NULL)
+            {
+               filehandle* new_handle = new filehandle();
+               handles[i] = new_handle;
+               handle = i;
+               return no_error;
+            }
          }
-         return 0;
+         return not_found;
       }
 
 
    private:
       tcp::socket socket;
-      std::array<filehandle,100> handles;
+      std::array<filehandle*,100> handles;
 };
 
 void handle_client (client* c);

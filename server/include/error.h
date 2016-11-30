@@ -6,7 +6,8 @@ typedef enum errort
    no_error = 0,
    not_available = 1,
    invalid_request = 2,
-   toobig = 3
+   toobig = 3,
+   not_found = 4
 } srfs_error_t;
 
 #endif
