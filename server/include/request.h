@@ -39,12 +39,17 @@ public:
    void setType (request_type_t t) {this->type = t;}
    request_type_t getType() {return this->type;}
    std::string getPath() {return this->path;}
+   void set_handle (const int h) {this->handle = h;}
+   void set_size (const int s) {this->size = s;}
+   int get_size () {return this->size;}
+   int get_handle () {return this->handle;}
 
 private:
    request_type_t type;
    std::string path;
    size_t size;
    size_t offset;
+   int handle;
 };
 
 #endif

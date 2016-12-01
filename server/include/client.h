@@ -46,7 +46,7 @@ class client
       {
          for (size_t i = 0 ; i < maxhandles ; i++)
          {
-            cout << "handle at " << std::to_string(i) << "->" << handles[i] << endl;
+//            cout << "handle at " << std::to_string(i) << "->" << handles[i] << endl;
 
             if (handles[i] == NULL)
             {

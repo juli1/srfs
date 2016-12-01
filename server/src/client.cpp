@@ -27,9 +27,15 @@ srfs_error_t client::openfile (std::string filename, int& handle)
       return (not_available);
    }
 
-   fh->set_path (filename);
+   /**
+    * Cannot open the path, so, let's remove the filehandle
+    */
+   if (fh->set_path (filename) != no_error)
+   {
+      free (fh);
+      return (not_available);
+   }
 
-   cout << "Find unused hande" << endl;
    return no_error;
 }
 
@@ -49,6 +55,19 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
          rep.set_type (open_ko);
       }
    }
+
+   if (req.getType() == readfile)
+   {
+      cout << "reading file for handle " << req.get_handle() << " and size " << req.get_size() << endl;
+      filehandle* handle = c->get_handle (req.get_handle());
+      int final_size = handle->read_data (rep.get_buffer(), req.get_size());
+      cout << "final size="<< final_size << endl;
+      rep.set_type (read_ok);
+      rep.set_buffer_size (final_size);
+   }
+
+
+
    return no_error;
 }
 
@@ -69,14 +88,31 @@ srfs_error_t read_request (std::string str, client* c, request& request)
       cout << "opening a file" << endl;
 
       request.setType (openfile);
-      std::string filename = str.substr (5, str.size() - 5);
+      std::string filename = str.substr (5, str.size() - 7);
       /*
        * Here, we need to protect the filename. it can be ../../../
        */
       request.setPath (filename);
-
-      cout << "filename" << filename << endl;
    }
+
+   if (str.substr (0, 4) == "read")
+   {
+      cout << "reading a file" << endl;
+
+      request.setType (readfile);
+      str.erase (0, 5);
+
+      int pos = str.find (" ");
+      std::string handle_str = str.substr(0, pos);
+      int handle = atoi (handle_str.c_str());
+
+      str.erase (0, pos + 1);
+      int size = atoi (str.c_str());
+
+      request.set_size (size);
+      request.set_handle (handle);
+   }
+
    return no_error;
 }
 
@@ -118,6 +154,8 @@ void handle_client (client* c)
          }
 
          rep.serialize (serialized, serialized_size);
+
+//         cout << "serialized size="<<serialized_size << endl;
 
          c->get_socket().write_some (boost::asio::buffer (serialized, serialized_size), error);
 
