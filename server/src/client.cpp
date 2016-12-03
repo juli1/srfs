@@ -6,11 +6,20 @@
 #include "request.h"
 #include "reply.h"
 #include "client.h"
+#include "server.h"
 
 using std::endl;
 using std::cout;
 
 #define MAX_LENGTH 1024
+
+void client::shutdown ()
+{
+   if (this->get_socket().is_open())
+   {
+      this->get_socket().close();
+   }
+}
 
 srfs_error_t client::openfile (std::string filename, int& handle)
 {
@@ -198,12 +207,11 @@ void handle_client (client* c)
          if (req.getType() == quit)
          {
             cout << "Leaving client" << endl;
-            if (c->get_socket().is_open())
-            {
-               c->get_socket().close();
-            }
+
+            server* s = server::getInstance();
+            s->removeClient (c);
             cout << "Client closed" << endl;
-           return; 
+            return; 
          }
 
          process_request (c, req, rep);

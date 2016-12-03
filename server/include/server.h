@@ -3,8 +3,11 @@
 
 #include <string>
 #include <chrono>
+#include <list>
 #include <thread>
 #include <boost/asio.hpp>
+
+#include "client.h"
 
 using boost::asio::ip::tcp;
 
@@ -19,9 +22,9 @@ class server
       server(boost::asio::io_service& io_service, short port)
          : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
          socket_(io_service)
-   {
-      server::m_instance = this;
-   }
+      {
+         server::m_instance = this;
+      }
    
       
    static server* getInstance ()
@@ -29,7 +32,11 @@ class server
       return (server*) server::m_instance;
    }
 
+   void removeClient (client* c);
+
    void shutdown ();
+
+   list<client*>& getClients() { return this->clients;}
 
 
    void start();
@@ -37,6 +44,7 @@ class server
    private:
       tcp::acceptor acceptor_;
       tcp::socket socket_;
+      list<client*> clients;
 };
 
 

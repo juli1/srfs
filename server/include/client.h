@@ -27,6 +27,8 @@ class client
    public:
       static const size_t maxhandles = 100;
 
+      void shutdown ();
+
       client (tcp::socket s) : socket(std::move(s)), handles()
       {
          
