@@ -54,31 +54,54 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
       {
          rep.set_type (open_ko);
       }
+      return no_error;
    }
 
    if (req.getType() == readfile)
    {
       cout << "reading file for handle " << req.get_handle() << " and size " << req.get_size() << endl;
       filehandle* handle = c->get_handle (req.get_handle());
+
+      // make sure we have a valid handle, will segfault otherwise
+      if (handle == nullptr)
+      {
+         return invalid_request;
+      }
+
       int final_size = handle->read_data (rep.get_buffer(), req.get_size());
       cout << "final size="<< final_size << endl;
       rep.set_type (read_ok);
       rep.set_buffer_size (final_size);
+      return no_error;
    }
 
+   if (req.getType() == closefile)
+   {
+      cout << "close file for handle " << req.get_handle() << endl;
+      if (c->close_handle (req.get_handle()) == no_error)
+      {
+         rep.set_type (close_ok);
+      }
+      else
+      {
+         rep.set_type (close_ko);
+      }
 
+      return no_error;
+   }
 
-   return no_error;
+   return not_available;
 }
 
 srfs_error_t read_request (std::string str, client* c, request& request)
 {
-   cout << "reading the request" << endl;
+   cout << "reading the request, got: " << str << endl;
    /*
-    * We assume that is the request is less than 10
-    * chars, this is not valid.
+    * We assume that is the request is less than 4
+    * chars, this is not valid. We need at least
+    * 4 chars for the command request (open/close/read/write).
     */
-   if (str.size () < 10)
+   if (str.size () < 4)
    {
       return invalid_request;
    }
@@ -93,6 +116,7 @@ srfs_error_t read_request (std::string str, client* c, request& request)
        * Here, we need to protect the filename. it can be ../../../
        */
       request.setPath (filename);
+      return no_error;
    }
 
    if (str.substr (0, 4) == "read")
@@ -111,9 +135,34 @@ srfs_error_t read_request (std::string str, client* c, request& request)
 
       request.set_size (size);
       request.set_handle (handle);
+      return no_error;
    }
 
-   return no_error;
+   if (str.substr (0, 5) == "close")
+   {
+      cout << "closing a file" << endl;
+
+      request.setType (closefile);
+      str.erase (0, 6);
+
+      int pos = str.find (" ");
+      std::string handle_str = str.substr(0, pos);
+      int handle = atoi (handle_str.c_str());
+
+      request.set_handle (handle);
+      return no_error;
+   }
+
+   if (str.substr (0, 4) == "quit")
+   {
+      cout << "quit" << endl;
+
+      request.setType (quit);
+      return no_error;
+   }
+
+
+   return invalid_request;
 }
 
 void handle_client (client* c)
@@ -144,6 +193,17 @@ void handle_client (client* c)
          if (err != no_error)
          {
             continue;
+         }
+
+         if (req.getType() == quit)
+         {
+            cout << "Leaving client" << endl;
+            if (c->get_socket().is_open())
+            {
+               c->get_socket().close();
+            }
+            cout << "Client closed" << endl;
+           return; 
          }
 
          process_request (c, req, rep);

@@ -10,6 +10,7 @@ typedef enum requestt
    openfile = 1,
    closefile = 2,
    readfile = 3,
+   quit = 4,
    invalid = -1
 }request_type_t;
 

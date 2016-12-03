@@ -41,6 +41,21 @@ class client
 
       srfs_error_t openfile (std::string filename, int& handle);
 
+      srfs_error_t close_handle (int handle)
+      {
+         filehandle* h = this->handles[handle];
+
+         if (h == nullptr)
+         {
+            return invalid_request;
+         }
+
+         delete (h);
+
+         this->handles[handle] = NULL;
+         return no_error;
+      }
+
 
       srfs_error_t get_unused_handle (int& handle)
       {

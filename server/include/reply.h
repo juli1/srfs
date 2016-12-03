@@ -16,6 +16,8 @@ typedef enum replytypet
    open_ko,
    read_ok,
    read_ko,
+   close_ok,
+   close_ko,
    error,
 }reply_type_t;
 
@@ -69,14 +71,24 @@ public:
             c[3+intstrlen] = '\n';
             c[3+intstrlen + 1] = '\0';
             s = 4 + intstrlen;
+            return no_error;
+            break;
+         }
+
+         case close_ok:
+         {
+            std::memcpy (c, "OK\n", 3);
+            s = 3;
+            return no_error;
             break;
          }
 
          case open_ko:
+         case close_ko:
          {
             std::memcpy (c, "KO\n", 3);
-            s = 6;
-
+            s = 3;
+            return no_error;
             break;
          }
 
@@ -89,6 +101,7 @@ public:
             memcpy (c + slen, this->data, this->datasize);
             s = slen + this->datasize;
             cout << "s="<< s;
+            return no_error;
 
             break;
          }

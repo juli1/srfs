@@ -70,6 +70,16 @@ public:
 
    friend ostream& operator<< (ostream& stream, const filehandle& fh);
 
+   ~filehandle ()
+   {
+      cout << "Closing file" << endl;
+
+      if (internal.is_open ())
+      {
+         internal.close();
+      }
+   }
+
 private:
    std::ifstream internal;
    std::string path;
