@@ -27,6 +27,11 @@ public:
       internal.open (p);
    }
 
+   std::string getPath ()
+   {
+      return this->path;
+   }
+
    srfs_error_t set_path (std::string p)
    {
       this->path = p;

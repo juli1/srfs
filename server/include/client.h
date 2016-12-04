@@ -41,6 +41,8 @@ class client
          return handles[n];
       }
 
+      std::array<filehandle*,100> getHandles() {return this->handles;}
+
       srfs_error_t openfile (std::string filename, int& handle);
 
       srfs_error_t close_handle (int handle)

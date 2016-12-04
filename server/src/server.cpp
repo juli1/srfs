@@ -28,6 +28,17 @@ void management_command (std::string& command)
       for (client* c : clients)
       {
          cout << "client" << i << " active" << endl;
+
+         int fileno = 0;
+
+         for (filehandle* fh : c->getHandles())
+         {
+            if (fh != nullptr)
+            {
+               cout << "  -> filehandle" << fileno << " open ; path=" << fh->getPath() << endl;
+            }
+            fileno++;
+         }
          i++;
       }
       return;
