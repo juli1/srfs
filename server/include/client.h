@@ -86,7 +86,7 @@ class client
 
 void handle_client (client* c);
 
-srfs_error_t read_request (std::string str, client* c, request& request);
+srfs_error_t read_request (std::string str, request& request);
 
 
 srfs_error_t process_request (client* c, request& req, reply& rep);

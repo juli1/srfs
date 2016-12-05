@@ -41,7 +41,9 @@ srfs_error_t client::openfile (std::string filename, int& handle)
     */
    if (fh->set_path (filename) != no_error)
    {
-      free (fh);
+      cout << "cannot set path" << endl;
+      delete (fh);
+      handles[handle] = nullptr;
       return (not_available);
    }
 
@@ -102,7 +104,7 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
    return not_available;
 }
 
-srfs_error_t read_request (std::string str, client* c, request& request)
+srfs_error_t read_request (std::string str, request& request)
 {
    cout << "reading the request, got: " << str << endl;
    /*
@@ -197,7 +199,7 @@ void handle_client (client* c)
             continue;
          }
 
-         err = read_request (data_, c, req);
+         err = read_request (data_, req);
 
          if (err != no_error)
          {

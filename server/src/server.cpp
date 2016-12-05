@@ -92,6 +92,14 @@ void server_management ()
       cout << "[srfs] ";
       std::string incoming;
       cin >> incoming;
+
+      if (cin.eof())
+      {
+         server* s = server::getInstance ();
+         s->shutdown ();
+         exit (EXIT_SUCCESS);
+      }
+
       cout << "command " << incoming << endl;
       management_command (incoming);
    }
@@ -101,10 +109,19 @@ void server_management ()
 void server::shutdown ()
 {
    cout << "Shutdown server" << endl;
+   for (client* c : clients)
+   {
+      this->removeClient (c);
+   }
 }
 
 void server::removeClient (client* c)
 {
+   if (c == nullptr)
+   {
+      return;
+   }
+
    clients.remove (c);
    c->shutdown();
 }

@@ -77,7 +77,7 @@ public:
 
    ~filehandle ()
    {
-      cout << "Closing file" << endl;
+      cout << "[filehandle] closing file through destructor" << endl;
 
       if (internal.is_open ())
       {

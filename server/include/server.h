@@ -29,7 +29,7 @@ class server
       
    static server* getInstance ()
    {
-      return (server*) server::m_instance;
+      return static_cast<server*>(server::m_instance);
    }
 
    void removeClient (client* c);
