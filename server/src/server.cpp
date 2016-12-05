@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "debug.hpp"
 #include "server.hpp"
 #include "client.hpp"
 #include "console.hpp"
@@ -16,7 +17,8 @@ server *server::m_instance = nullptr;
 // resources
 void server::shutdown ()
 {
-   cout << "Shutdown server" << endl;
+   debug ("Shutdown server", SEVERITY_LOGGING);
+
    for (client* c : clients)
    {
       this->removeClient (c);
@@ -42,7 +44,7 @@ void server::start()
 
    while (1)
    {
-      cout << "new client" << endl;
+      debug ("new client", SEVERITY_LOGGING);
       acceptor_.accept(socket_);
 
       client* newclient = new client(std::move(socket_));
