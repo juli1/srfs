@@ -7,7 +7,7 @@
 #include <thread>
 #include <boost/asio.hpp>
 
-#include "client.h"
+#include "client.hpp"
 
 using boost::asio::ip::tcp;
 

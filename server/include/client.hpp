@@ -11,10 +11,10 @@
 #include <fstream>
 #include <boost/asio.hpp>
 
-#include "reply.h"
-#include "request.h"
 #include "error.h"
-#include "filehandle.h"
+#include "reply.hpp"
+#include "request.hpp"
+#include "filehandle.hpp"
 
 
 using std::move;

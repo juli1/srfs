@@ -5,8 +5,8 @@
 #include <chrono>
 #include <thread>
 
-#include <client.h>
-#include <server.h>
+#include "client.hpp"
+#include "server.hpp"
 
 
 using std::cout;

@@ -3,10 +3,10 @@
 #include <iostream>
 #include <fstream>
 
-#include "request.h"
-#include "reply.h"
-#include "client.h"
-#include "server.h"
+#include "request.hpp"
+#include "reply.hpp"
+#include "client.hpp"
+#include "server.hpp"
 
 using std::endl;
 using std::cout;

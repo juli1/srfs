@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+
 #include "error.h"
 
 using std::ostream;
