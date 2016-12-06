@@ -55,5 +55,20 @@ void server::start()
    }
 }
 
+server::server(boost::asio::io_service& io_service, short port)
+   : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
+   socket_(io_service)
+{
+   server::m_instance = this;
+}
+
+
+
+list<client*>& server::getClients()
+{
+   return this->clients;
+}
+
+
 
 
