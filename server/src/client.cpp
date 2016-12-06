@@ -13,6 +13,62 @@ using std::cout;
 
 #define MAX_LENGTH 1024
 
+srfs_error_t client::close_handle (int handle)
+{
+   filehandle* h = this->handles[handle];
+
+   if (h == nullptr)
+   {
+      return invalid_request;
+   }
+
+   delete (h);
+
+   this->handles[handle] = NULL;
+   return no_error;
+}
+
+
+srfs_error_t client::get_unused_handle (int& handle)
+{
+   for (size_t i = 0 ; i < maxhandles ; i++)
+   {
+      //            cout << "handle at " << std::to_string(i) << "->" << handles[i] << endl;
+
+      if (handles[i] == NULL)
+      {
+         filehandle* new_handle = new filehandle();
+         handles[i] = new_handle;
+         handle = i;
+         return no_error;
+      }
+   }
+   return not_found;
+}
+
+
+client::client (tcp::socket s) : socket(std::move(s)), handles()
+{
+}
+
+tcp::socket& client::get_socket ()
+{
+   return socket;
+}
+
+
+std::array<filehandle*,100> client::getHandles()
+{
+   return this->handles;
+}
+
+filehandle* client::get_handle(size_t n)
+{
+   return handles[n];
+}
+
+
+
 void client::shutdown ()
 {
    if (this->get_socket().is_open())
@@ -225,7 +281,7 @@ void handle_client (client* c)
 
          rep.serialize (serialized, serialized_size);
 
-//         cout << "serialized size="<<serialized_size << endl;
+         //         cout << "serialized size="<<serialized_size << endl;
 
          c->get_socket().write_some (boost::asio::buffer (serialized, serialized_size), error);
 

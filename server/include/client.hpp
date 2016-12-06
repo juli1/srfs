@@ -29,60 +29,25 @@ class client
 
       void shutdown ();
 
-      client (tcp::socket s) : socket(std::move(s)), handles()
-      {
-         
-      }
+      client (tcp::socket s);
 
-      tcp::socket& get_socket () {return socket;}
+      tcp::socket& get_socket ();
 
-      filehandle* get_handle(size_t n)
-      {
-         return handles[n];
-      }
+      filehandle* get_handle(size_t n);
 
-      std::array<filehandle*,100> getHandles() {return this->handles;}
+      std::array<filehandle*,100> getHandles();
 
       srfs_error_t openfile (std::string filename, int& handle);
 
-      srfs_error_t close_handle (int handle)
-      {
-         filehandle* h = this->handles[handle];
+      srfs_error_t close_handle (int handle);
 
-         if (h == nullptr)
-         {
-            return invalid_request;
-         }
-
-         delete (h);
-
-         this->handles[handle] = NULL;
-         return no_error;
-      }
-
-
-      srfs_error_t get_unused_handle (int& handle)
-      {
-         for (size_t i = 0 ; i < maxhandles ; i++)
-         {
-//            cout << "handle at " << std::to_string(i) << "->" << handles[i] << endl;
-
-            if (handles[i] == NULL)
-            {
-               filehandle* new_handle = new filehandle();
-               handles[i] = new_handle;
-               handle = i;
-               return no_error;
-            }
-         }
-         return not_found;
-      }
-
+      srfs_error_t get_unused_handle (int& handle);
 
    private:
       tcp::socket socket;
       std::array<filehandle*,100> handles;
 };
+
 
 void handle_client (client* c);
 
