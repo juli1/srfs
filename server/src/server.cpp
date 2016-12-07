@@ -5,6 +5,7 @@
 #include "client.hpp"
 #include "console.hpp"
 
+using std::list;
 using std::cin;
 using std::cout;
 using std::endl;

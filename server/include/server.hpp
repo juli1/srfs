@@ -31,14 +31,14 @@ class server
 
 	void shutdown ();
 
-	list<client*>& getClients();
+	std::list<client*>& getClients();
 
 	void start();
 
 	private:
 	tcp::acceptor acceptor_;
 	tcp::socket socket_;
-	list<client*> clients;
+	std::list<client*> clients;
 };
 
 

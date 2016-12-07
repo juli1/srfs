@@ -7,7 +7,6 @@
 #include "error.h"
 
 using std::ostream;
-using namespace std;
 
 typedef enum filehandlestatus
 {

@@ -2,6 +2,7 @@
 
 #include "filehandle.hpp"
 
+using namespace std;
 using std::ostream;
 
 ostream& operator<< (ostream& stream, const filehandle& fh) {

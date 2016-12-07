@@ -1,8 +1,12 @@
 #include <iostream>
+#include <list>
 
 #include "server.hpp"
 #include "client.hpp"
 #include "console.hpp"
+
+using std::list;
+using std::cin;
 
 static void console_command (const std::string& command)
 {
