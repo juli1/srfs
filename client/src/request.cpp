@@ -1,10 +1,9 @@
 #include <iostream>
 
 #include "debug.hpp"
-#include "error.hpp"
 #include "request.hpp"
 
-Request::Request ()
+Request::Request (std::string server, int port, std::string file) : m_server(server), m_port(port), m_file(file)
 {
 }
 
@@ -14,7 +13,10 @@ srfs_error_t Request::perform ()
 	return no_error;
 }
 
-ReadRequest::ReadRequest ()
+
+
+
+ReadRequest::ReadRequest (std::string server, int port, std::string file, int size) : Request (server,port,file), m_size(size)
 {
 }
 
