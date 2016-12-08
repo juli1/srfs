@@ -82,6 +82,19 @@ int main (int ac, char* av[])
 		std::string file = vm["file"].as<std::string>();
 		int size = vm["size"].as<int>();
 		ReadRequest request(server, port, file, size);
+
+		srfs_error_t err = request.perform ();
+
+		if (err == no_error)
+		{
+			exit (EXIT_SUCCESS);
+		}
+
+		exit (EXIT_SUCCESS);
+
+	
 	}
 
+	print_help (binary, desc);
+	exit (EXIT_FAILURE);
 }

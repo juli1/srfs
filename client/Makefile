@@ -1,6 +1,6 @@
 CC=/usr/bin/g++
 CPP_FLAGS=-Wall -std=c++11 -g -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -pedantic
-LD_FLAGS=-lboost_system  -lboost_program_options
+LD_FLAGS=-lboost_system  -lboost_program_options -lpthread
 BINARY=bin/client
 SRCS=src/debug.cpp src/request.cpp
 INCLUDE=-Iinclude/

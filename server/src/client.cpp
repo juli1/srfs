@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "debug.hpp"
 #include "request.hpp"
 #include "reply.hpp"
 #include "client.hpp"
@@ -175,10 +176,11 @@ srfs_error_t read_request (std::string str, request& request)
 
    if (str.substr (0, 4) == "open")
    {
-      cout << "opening a file" << endl;
 
       request.setType (openfile);
-      std::string filename = str.substr (5, str.size() - 7);
+      std::string filename = str.substr (5, str.size() - 5);
+
+	   debug ("opening file " + filename, SEVERITY_INFO);
       /*
        * Here, we need to protect the filename. it can be ../../../
        */
