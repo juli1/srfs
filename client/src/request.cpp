@@ -21,6 +21,10 @@ srfs_error_t Request::perform ()
 	return no_error;
 }
 
+Request::~Request ()
+{
+}
+
 
 
 
@@ -56,7 +60,6 @@ srfs_error_t ReadRequest::perform ()
 
 	debug ("reply is " + reply, SEVERITY_INFO);
 	reply.erase (0, 3);
-   int handle = atoi (reply.c_str());
 
 	debug ("handle" + reply, SEVERITY_INFO);
 
@@ -76,6 +79,11 @@ srfs_error_t ReadRequest::perform ()
 
 	return no_error;
 }
+
+ReadRequest::~ReadRequest ()
+{
+}
+
 
 
 
