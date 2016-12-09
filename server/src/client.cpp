@@ -43,8 +43,13 @@ srfs_error_t client::get_unused_handle (int& handle)
 }
 
 
-client::client (tcp::socket s) : socket(std::move(s)), handles()
+client::client (tcp::socket s) : socket(std::move(s)), handles(), thread (nullptr)
 {
+}
+
+void client::setThread (std::thread* t)
+{
+   this->thread = t;
 }
 
 tcp::socket& client::get_socket ()
@@ -67,6 +72,12 @@ filehandle* client::get_handle(size_t n)
 
 void client::shutdown ()
 {
+   /*
+   if (this->thread != nullptr)
+   {
+      delete (this->thread);
+   }
+   */
    if (this->get_socket().is_open())
    {
       this->get_socket().close();

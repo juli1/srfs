@@ -43,9 +43,12 @@ class client
 
       srfs_error_t get_unused_handle (int& handle);
 
+      void setThread (std::thread* t);
+
    private:
       tcp::socket socket;
       std::array<filehandle*,100> handles;
+      std::thread* thread;
 };
 
 

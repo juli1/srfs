@@ -22,7 +22,10 @@ void server::shutdown ()
 
    for (client* c : clients)
    {
-      this->removeClient (c);
+      if (c != nullptr)
+      {
+         c->shutdown(); // close sockets and free client resource
+      }
    }
 }
 
@@ -52,6 +55,7 @@ void server::start()
       clients.push_back (newclient);
 
       std::thread t(handle_client, newclient);
+      newclient->setThread (&t);
       t.detach();
    }
 }

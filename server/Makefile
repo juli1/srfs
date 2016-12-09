@@ -1,6 +1,6 @@
 CC=/usr/bin/g++
 CPP_FLAGS=-Wall -std=c++11 -g -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -pedantic
-LD_FLAGS=-lboost_system -lpthread
+LD_FLAGS=-lboost_system -lpthread -lboost_program_options 
 BINARY=bin/server
 SRCS=src/client.cpp src/server.cpp src/filehandle.cpp src/console.cpp src/debug.cpp src/reply.cpp
 INCLUDE=-Iinclude/

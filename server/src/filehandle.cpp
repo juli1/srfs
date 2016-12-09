@@ -6,6 +6,8 @@
 using namespace std;
 using std::ostream;
 
+extern std::string basedir;
+
 ostream& operator<< (ostream& stream, const filehandle& fh) {
    stream << "filehandle offset=" << fh.offset << std::endl;
    return stream;
@@ -30,7 +32,11 @@ srfs_error_t filehandle::set_path (std::string p)
 {
 	this->path = p;
 	this->offset = 0;
-	internal.open (p, ios::in |  ios::out);
+	std::string completePath = basedir + "/" + p;
+
+	debug ("path" + completePath, SEVERITY_DEBUG);
+
+	internal.open (completePath, ios::in |  ios::out);
 
 	if (internal.is_open ())
 	{

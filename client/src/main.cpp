@@ -38,10 +38,7 @@ void check_arguments (std::string& binary, po::variables_map& vm, po::options_de
 	
 	if (operation == "read")
 	{
-		if (
-			vm.count("file") == 0 ||
-			vm.count("size") == 0
-			)
+		if (vm.count("file") == 0)
 		{
 			print_help (binary, desc);
 			exit (EXIT_FAILURE);

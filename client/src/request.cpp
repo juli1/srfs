@@ -52,7 +52,7 @@ srfs_error_t ReadRequest::perform ()
 	debug ("sending" + msg, SEVERITY_INFO);
 
    s.write_some (boost::asio::buffer (msg, msg.length()), error);
-	char buf[1024];
+	char buf[1025];
 
    len = s.read_some (boost::asio::buffer (buf, 1024), error);
 	buf[len] = '\0';
@@ -63,11 +63,10 @@ srfs_error_t ReadRequest::perform ()
 
 	debug ("handle" + reply, SEVERITY_INFO);
 
-	msg = "read " + reply + " 1024\n";
-   s.write_some (boost::asio::buffer (msg, msg.length()), error);
-
    do
 	{
+		msg = "read " + reply + " 1024\n";
+   	s.write_some (boost::asio::buffer (msg, msg.length()), error);
 
 		len = s.read_some (boost::asio::buffer (buf, 1024), error);
 		buf[len] = '\0';
