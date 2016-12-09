@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "debug.hpp"
 #include "filehandle.hpp"
 
 using namespace std;
@@ -31,8 +32,6 @@ srfs_error_t filehandle::set_path (std::string p)
 	this->offset = 0;
 	internal.open (p, ios::in |  ios::out);
 
-	//cout << "open the path|" << p << "|" << endl;
-
 	if (internal.is_open ())
 	{
 		return no_error;
@@ -56,12 +55,9 @@ int filehandle::read_data (char* data, int size)
 	{
 		internal.get(c);
 		*ptr = c;
-		cout << "read char" << c << endl;
 		ptr++;
 		readsize++;
 	}
-
-	cout << "read data " << data << endl;
 
 	return readsize;
 }
@@ -69,7 +65,7 @@ int filehandle::read_data (char* data, int size)
 
 filehandle::~filehandle ()
 {
-	cout << "[filehandle] closing file through destructor" << endl;
+	debug ("[filehandle] closing file through destructor", SEVERITY_DEBUG);
 
 	if (internal.is_open ())
 	{

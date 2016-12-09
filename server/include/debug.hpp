@@ -5,6 +5,7 @@
 
 typedef enum enumseverity
 {
+	SEVERITY_DEBUG,
 	SEVERITY_INFO,
 	SEVERITY_LOGGING,
 	SEVERITY_WARNING,

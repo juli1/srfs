@@ -63,14 +63,16 @@ srfs_error_t ReadRequest::perform ()
 	msg = "read " + reply + " 1024\n";
    s.write_some (boost::asio::buffer (msg, msg.length()), error);
 
-   len = s.read_some (boost::asio::buffer (buf, 1024), error);
+   do
+	{
 
-	buf[len] = '\0';
+		len = s.read_some (boost::asio::buffer (buf, 1024), error);
+		buf[len] = '\0';
+		std::string content(buf);
+		std::cout << content;
 
-	std::cout << len;
-	std::string content(buf);
-	std::cout << content;
-
+	}
+	while (len == 1024);
 
 	return no_error;
 }

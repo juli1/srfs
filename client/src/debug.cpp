@@ -2,11 +2,13 @@
 
 #include "debug.hpp"
 
-using namespace std;
+
+using std::endl
+using std::cerr;
 
 
 void debugfunc (std::string msg, severity_t sev, std::string filename, int line)
 {
-	cout << "[" << filename << ":"<< line << "] "  << msg << endl;
+	cerr << "[" << filename << ":"<< line << "] "  << msg << endl;
 }
 

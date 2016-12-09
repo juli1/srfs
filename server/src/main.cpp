@@ -4,20 +4,19 @@
 #include <boost/asio.hpp>
 #include <chrono>
 #include <thread>
+#include <debug.hpp>
 
 #include "client.hpp"
 #include "server.hpp"
 
 
-using std::cout;
-using std::endl;
 using std::thread;
 using boost::asio::ip::tcp;
 
 
 int main()
 {
-   cout << "starting" << endl;
+   debug ("starting", SEVERITY_INFO);
    try
    {
       boost::asio::io_service io_service;

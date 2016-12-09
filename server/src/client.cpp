@@ -9,9 +9,6 @@
 #include "client.hpp"
 #include "server.hpp"
 
-using std::endl;
-using std::cout;
-
 #define MAX_LENGTH 1024
 
 srfs_error_t client::close_handle (int handle)
@@ -34,8 +31,6 @@ srfs_error_t client::get_unused_handle (int& handle)
 {
    for (size_t i = 0 ; i < maxhandles ; i++)
    {
-      //            cout << "handle at " << std::to_string(i) << "->" << handles[i] << endl;
-
       if (handles[i] == NULL)
       {
          filehandle* new_handle = new filehandle();
@@ -98,7 +93,7 @@ srfs_error_t client::openfile (std::string filename, int& handle)
     */
    if (fh->set_path (filename) != no_error)
    {
-      cout << "cannot set path" << endl;
+      debug ("cannot set path", SEVERITY_DEBUG);
       delete (fh);
       handles[handle] = nullptr;
       return (not_available);
@@ -114,7 +109,6 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
       int handle;
       if (c->openfile (req.getPath(), handle) == no_error)
       {
-         cout << "Handle=" << handle << endl;
          rep.set_type (open_ok);
          rep.set_handle (handle);
       }
@@ -127,7 +121,6 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
 
    if (req.getType() == readfile)
    {
-      cout << "reading file for handle " << req.get_handle() << " and size " << req.get_size() << endl;
       filehandle* handle = c->get_handle (req.get_handle());
 
       // make sure we have a valid handle, will segfault otherwise
@@ -137,7 +130,6 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
       }
 
       int final_size = handle->read_data (rep.get_buffer(), req.get_size());
-      cout << "final size="<< final_size << endl;
       rep.set_type (read_ok);
       rep.set_buffer_size (final_size);
       return no_error;
@@ -145,7 +137,7 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
 
    if (req.getType() == closefile)
    {
-      cout << "close file for handle " << req.get_handle() << endl;
+      debug ("close file for handle ", SEVERITY_DEBUG);
       if (c->close_handle (req.get_handle()) == no_error)
       {
          rep.set_type (close_ok);
@@ -163,7 +155,7 @@ srfs_error_t process_request (client* c, request& req, reply& rep)
 
 srfs_error_t read_request (std::string str, request& request)
 {
-   cout << "reading the request, got: " << str << endl;
+   debug ("reading the request, got: " + str , SEVERITY_DEBUG);
    /*
     * We assume that is the request is less than 4
     * chars, this is not valid. We need at least
@@ -190,8 +182,6 @@ srfs_error_t read_request (std::string str, request& request)
 
    if (str.substr (0, 4) == "read")
    {
-      cout << "reading a file" << endl;
-
       request.setType (readfile);
       str.erase (0, 5);
 
@@ -209,8 +199,6 @@ srfs_error_t read_request (std::string str, request& request)
 
    if (str.substr (0, 5) == "close")
    {
-      cout << "closing a file" << endl;
-
       request.setType (closefile);
       str.erase (0, 6);
 
@@ -224,8 +212,6 @@ srfs_error_t read_request (std::string str, request& request)
 
    if (str.substr (0, 4) == "quit")
    {
-      cout << "quit" << endl;
-
       request.setType (quit);
       return no_error;
    }
@@ -240,7 +226,6 @@ void handle_client (client* c)
    char serialized[MAX_LENGTH];
    uint32_t serialized_size;
 
-   cout << "starting client" << endl;
    while (1)
    {
       boost::system::error_code error;
@@ -250,7 +235,7 @@ void handle_client (client* c)
 
       while (1)
       {
-         size_t len = c->get_socket().read_some (boost::asio::buffer (data_, MAX_LENGTH), error);
+         c->get_socket().read_some (boost::asio::buffer (data_, MAX_LENGTH), error);
 
          if (error)
          {
@@ -266,11 +251,8 @@ void handle_client (client* c)
 
          if (req.getType() == quit)
          {
-            cout << "Leaving client" << endl;
-
             server* s = server::getInstance();
             s->removeClient (c);
-            cout << "Client closed" << endl;
             return; 
          }
 
@@ -282,8 +264,6 @@ void handle_client (client* c)
          }
 
          rep.serialize (serialized, serialized_size);
-
-         //         cout << "serialized size="<<serialized_size << endl;
 
          c->get_socket().write_some (boost::asio::buffer (serialized, serialized_size), error);
 
